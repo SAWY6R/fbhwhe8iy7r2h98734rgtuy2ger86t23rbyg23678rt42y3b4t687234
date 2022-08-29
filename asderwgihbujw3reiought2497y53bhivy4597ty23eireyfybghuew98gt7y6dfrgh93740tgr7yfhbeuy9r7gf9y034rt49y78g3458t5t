@@ -1,0 +1,18 @@
+_G.Smoothness = .5
+_G.ShowFov = true
+_G.Fov = 5
+_G.TeamCheck = nil
+local q='mouse'
+local r=game:GetService('Players')
+local s=game:GetService("UserInputService")
+local t=r.LocalPlayer;
+local u=t:GetMouse()
+local n=false;
+local cam=workspace.CurrentCamera;
+local v=Drawing.new("Circle")v.Position=Vector2.new(cam.ViewportSize.X/2,cam.ViewportSize.Y/2)v.Radius=100;v.Color=Color3.new(1,1,1)v.Thickness=2.5;v.Filled=false;v.Transparency=1;v.NumSides=0;v.Visible=_G.ShowFov;function UpdatefovSize(w)v.Radius=w*23;_G.Fov=w end;UpdatefovSize(_G.Fov)function GetNearest()for x,y in next,r:GetPlayers()do if y.Character:FindFirstChild("Head")~=nil then if _G.TeamCheck==true and y.TeamColor~=t.TeamColor then 
+local z=cam:WorldToScreenPoint(y.Character["Head"].Position)
+local A=(Vector2.new(u.X,u.Y)-Vector2.new(z.X,z.Y)).magnitude;if z.Z>0 and A<=cam.ViewportSize.X/(90/_G.Fov)then return y.Character end elseif _G.TeamCheck~=true then 
+local z=cam:WorldToScreenPoint(y.Character["Head"].Position)
+local A=(Vector2.new(u.X,u.Y)-Vector2.new(z.X,z.Y)).magnitude;if z.Z>0 and A<=cam.ViewportSize.X/(90/_G.Fov)then return y.Character end end end end end;u.Button2Down:Connect(function()n=true end)u.Button2Up:Connect(function()n=false end)s.InputBegan:Connect(function(B)if B.KeyCode==Enum.KeyCode.P then _G.TeamCheck=not _G.TeamCheck end end)s.InputBegan:Connect(function(B)if B.KeyCode==Enum.KeyCode.F1 then UpdatefovSize(_G.Fov+0.5)end end)s.InputBegan:Connect(function(B)if B.KeyCode==Enum.KeyCode.F2 then UpdatefovSize(_G.Fov-0.5)end end)while wait()do pcall(function()target=GetNearest()if target and n==true then 
+local C=cam:WorldToScreenPoint(target["Head"].Position)
+local D=Vector2.new((C.X-u.X)*_G.Smoothness,(C.Y-u.Y)*_G.Smoothness)mousemoverel(D.X,D.Y)end end)end
